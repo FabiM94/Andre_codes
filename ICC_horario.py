@@ -1,7 +1,10 @@
 import pandas as pd
 
 ## Load the data from the Excel file
-df = pd.read_excel('ICC_List.xlsx', header=None)  # header=None if there's no header row
+#df = pd.read_excel('Data/ICC_List.xlsx', header=None)  # header=None if there's no header row
+## Load the data from the Excel file
+df = pd.read_excel('Data/Heat_Demand.xlsx', header=None)  # header=None if there's no header row
+
 
 #Takes the last column values (Date)
 last_column = df.iloc[:, -1]
