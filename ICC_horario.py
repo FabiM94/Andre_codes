@@ -13,14 +13,14 @@ data=df.iloc[:,:-1].T
 
 # Omit the last column
 df = df.iloc[:-1, :-1]
-
+df = df.apply(pd.to_numeric, errors='coerce')
 ## Transpose the DataFrame to work with columns as rows
 df_transposed = df.T
 
 
 df_varnames=df.iloc[1,:].T
 ## Group every 4 rows (original columns) and calculate the mean
-#df_grouped = df_transposed.groupby(df_transposed.index // 4).mean()
+df_grouped = df_transposed.groupby(df_transposed.index // 4).mean()
 
 # Transpose back to original orientation (columns as columns)
 #df_grouped = df_grouped.T
