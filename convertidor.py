@@ -39,7 +39,35 @@ def process_excel(input_file, output_file):
     # 9. Guardar el DataFrame procesado en un nuevo archivo Excel
     df.to_excel(output_file, index=False, header=True)
 
+def ICC_trasnform(input_file, output_file):
+    # Cargar el archivo Excel
+    df = pd.read_excel(input_file, header=None)  # Cargar sin encabezado si no tiene
 
-input_file= 'Data/Heat_Demand.xlsx'
-output_file="output.xlsx"
-process_excel(input_file, output_file)
+    # Transponer el DataFrame
+    df_transpuesto = df.T[::-1].reset_index(drop=True)
+    # Convertir la primera fila en encabezado
+    df_transpuesto.columns = df_transpuesto.iloc[0]  # Asignar la primera fila como encabezado
+    df_transpuesto = df_transpuesto[1:].reset_index(drop=True)  # Eliminar la fila usada como header
+    df= df_transpuesto
+     # Eliminar filas 2 y 3 (índices en pandas empiezan en 0)
+    df = df.drop(index=[1, 2])
+
+    # Tomar la fila 1 y repetirla 24 veces
+    fila_1 = df.iloc[0]  # Seleccionar la fila 1
+    df_repetida = pd.DataFrame([fila_1] * 23, columns=df.columns)  # Repetir 24 veces
+
+    # Combinar la fila 0 original con la fila repetida
+    df_final = pd.concat([df.iloc[[0]], df_repetida], ignore_index=True)
+    
+    # Renombrar la primera columna como "time"
+    df_final.rename(columns={df_final.columns[0]: "time"}, inplace=True)
+
+    # Reemplazar los valores de "time" con números del 1 al 24
+    df_final["time"] = range(1, 25)
+
+    return df_final
+                  
+input_file= 'Data/ICC_list.xlsx'
+output_file="Param/Param_ICC.xlsx"
+#process_excel(input_file, output_file)
+print(ICC_trasnform(input_file,output_file))
